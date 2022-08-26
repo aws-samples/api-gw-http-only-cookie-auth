@@ -47,7 +47,7 @@ Create test user:
 7.	Remember the **email** and **password** for later use.
 8.	Choose **Create user**.
 
-<img width="511" alt="Create user" src="https://user-images.githubusercontent.com/7549295/186916667-a22e180c-192d-416d-8079-5ab7d0ba0289.png">
+<img width="600" alt="Create user" src="https://user-images.githubusercontent.com/7549295/186923156-e81aa0aa-520b-4e6e-a3ea-90233b06eee5.png">
 
 That's it 🎉
 
@@ -80,7 +80,8 @@ To verify that your authorizer Lambda function works correctly you need to paste
 
 You did it 🎉
 
-## Tear down 
+## Tear down
+
 Don’t forget to delete all unwanted resources to avoid costs. Simply run at the root of your project:
 ```
 npx cdk destroy
