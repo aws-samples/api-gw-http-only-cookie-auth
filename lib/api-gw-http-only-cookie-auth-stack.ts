@@ -1,23 +1,23 @@
-import { HttpApi } from "@aws-cdk/aws-apigatewayv2-alpha";
+import { HttpApi, HttpMethod } from "@aws-cdk/aws-apigatewayv2-alpha";
 import { HttpLambdaAuthorizer, HttpLambdaResponseType } from "@aws-cdk/aws-apigatewayv2-authorizers-alpha";
 import { HttpLambdaIntegration } from "@aws-cdk/aws-apigatewayv2-integrations-alpha";
-import * as cdk from "aws-cdk-lib";
-import { CfnOutput, Duration, RemovalPolicy } from "aws-cdk-lib";
+import { CfnOutput, Duration, RemovalPolicy, Stack, StackProps } from "aws-cdk-lib";
 import { UserPool } from "aws-cdk-lib/aws-cognito";
 import { Architecture, Code, Function, InlineCode, Runtime } from "aws-cdk-lib/aws-lambda";
 import { Construct } from "constructs";
+import { randomUUID } from "crypto";
 import * as path from "path";
 
-export class ApiGwHttpOnlyCookieAuthStack extends cdk.Stack {
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+export class ApiGwHttpOnlyCookieAuthStack extends Stack {
+  constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
     /**
      * API Gateway
      */
-    const httpApi = new HttpApi(this, id + "-FHIR-Http-Api");
+    const httpApi = new HttpApi(this, id);
 
-    const httpApiDomainName = `${httpApi.apiId}.execute-api.${props?.env?.region}.amazonaws.com`;
+    const httpApiDomainName = `https://${httpApi.apiId}.execute-api.${Stack.of(this).region}.amazonaws.com`;
 
     new CfnOutput(this, "App URL", {
       value: httpApiDomainName,
@@ -27,31 +27,26 @@ export class ApiGwHttpOnlyCookieAuthStack extends cdk.Stack {
     /**
      * Cognito
      */
-    const userPoolId = id + "-user-pool";
-    const userPool = new UserPool(this, userPoolId, {
-      userPoolName: userPoolId,
+    const userPool = new UserPool(this, id, {
+      userPoolName: id,
       removalPolicy: RemovalPolicy.DESTROY,
     });
 
     const callbackUrl = httpApiDomainName + "/oauth2/callback";
-    const userPoolClient = userPool.addClient(id + "-AppClient", {
-      generateSecret: true,
+    const userPoolClient = userPool.addClient("MyAppClient", {
       oAuth: {
-        callbackUrls: [
-          callbackUrl,
-          "https://oauth.pstmn.io/v1/callback", // In case you want to test with Postman: https://www.postman.com/
-        ],
+        callbackUrls: [callbackUrl],
       },
     });
 
     const domain = userPool.addDomain(id + "-Domain", {
       cognitoDomain: {
-        domainPrefix: id.toLowerCase() + "-fhir-app",
+        domainPrefix: id.toLowerCase() + "-" + randomUUID(),
       },
     });
     const signInUrl = domain.signInUrl(userPoolClient, {
-      redirectUri: httpApiDomainName, // must be a URL configured under 'callbackUrls' with the client
-      signInPath: "/oauth2/authorize",
+      redirectUri: callbackUrl, // must be a URL configured under 'callbackUrls' with the client
+      // signInPath: "/oauth2/authorize", TODO: Check
     });
     new CfnOutput(this, "Sign-in URL", {
       value: signInUrl,
@@ -67,12 +62,12 @@ export class ApiGwHttpOnlyCookieAuthStack extends cdk.Stack {
       runtime: Runtime.NODEJS_16_X,
       architecture: Architecture.ARM_64,
       code: new InlineCode(`
-        exports.handler = () => {
-          return {
-            statusCode: 200,
-            body: JSON.stringify("Hello from Lambda!"),
-          }; 
-        };`),
+exports.handler = () => {
+  return {
+    statusCode: 200,
+    body: JSON.stringify("Hello from Lambda!"),
+  }; 
+};`),
     });
 
     /**
@@ -111,6 +106,7 @@ export class ApiGwHttpOnlyCookieAuthStack extends cdk.Stack {
      */
     httpApi.addRoutes({
       path: "/",
+      methods: [HttpMethod.GET],
       integration: new HttpLambdaIntegration("getProtectedResourceFunction", getProtectedResourceFunction),
       authorizer: new HttpLambdaAuthorizer("oAuth2AuthorizerFunction", oAuth2AuthorizerFunction, {
         responseTypes: [HttpLambdaResponseType.SIMPLE],
@@ -118,9 +114,9 @@ export class ApiGwHttpOnlyCookieAuthStack extends cdk.Stack {
       }),
     });
     httpApi.addRoutes({
-      path: "/api/v1/oauth2/callback",
+      path: "/oauth2/callback",
+      methods: [HttpMethod.GET],
       integration: new HttpLambdaIntegration("oAuth2ServerIntegration", oAuth2CallbackFunction),
-      // authorizer: noAuth, TODO: Check this
     });
   }
 }
