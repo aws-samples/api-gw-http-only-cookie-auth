@@ -19,7 +19,7 @@ $ git clone https://github.com/aws-samples/api-gw-http-only-cookie-auth.git
 
 Go into the cloned folder:
 ```
-$ cd ./api-gw-http-only-cookie-auth.git
+$ cd ./api-gw-http-only-cookie-auth
 ```
 
 Run the deployment script and follow the on-screen quesetions:
