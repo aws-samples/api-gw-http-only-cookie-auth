@@ -45,26 +45,25 @@ Create test user:
 That's it 🎉
 
 Now that you have all components in place, you can test your OAuth2 Flow:
-1.	Navigate to the Amazon Cognito console and choose MyUserPool.
-2.	Under the navigation tabs choose App integration.
-3.	Under App client list choose MyAppClient.
-4.	Choose View Hosted UI.
-5.	In the newly opened browser tab, open your developer tools, so you can inspect the network requests.
+1.	Navigate to the [Amazon Cognito console](https://console.aws.amazon.com/apigateway) and choose **HttpOnlyCookie**.
+2.	Under the navigation tabs choose **App integration**.
+3.	Under **App client list** choose **HttpOnlyCookieUserPoolMyAppClient**.
+4.	Choose **View Hosted UI**.
+5.	In the newly opened browser tab, open [your developer tools](https://balsamiq.com/support/faqs/browserconsole/), so you can inspect the network requests.
 6.	Login with your Email & password
-7.	Now you’ll see your Hello from Lambda message.
+7.	Now you’ll see your `Hello from Lambda` message.
 
 How do you know that the cookie was accurately set?
-Check your browser network tab in the browser developer settings. You’ll see the /oauth2/callback request which looks like this:
- 
-Figure 13 Callback network request
+Check your browser network tab in the browser developer settings. You’ll see the `/oauth2/callback` request which looks like this:
 
-As you can see the response headers include a Set-Cookie header as you specified in your Lambda function. This ensures that your OAuth2 access token is set as a HttpOnly cookie in the browser & access is prohibited from any client-side code.
+<img width="600" alt="Callback network request" src="https://user-images.githubusercontent.com/7549295/186917482-dd368520-17be-4ca7-afc3-84626b60e15b.png">
 
-Also, you can inspect the cookie in the browser cookie storage: 
-Figure 14 Cookie storage
+As you can see the response headers include a `Set-Cookie` header as you specified in your Lambda function. This ensures that your OAuth2 access token is set as a HttpOnly cookie in the browser & access is prohibited from any client-side code.
 
-| Note: In case you want to retry the authentication: Navigate in your browser to the base URL of Amazon Cognito & clear all site data in the browser developer tools. Do the same for your API Gateway website. Now you can restart the test with a clean state.
-![image](https://user-images.githubusercontent.com/7549295/186916891-b6c5af4d-e9ad-492f-9082-78ea7e2ca6a9.png)
+Also, you can inspect the cookie in the browser cookie storage:
+<img width="600" alt="Cookie storage" src="https://user-images.githubusercontent.com/7549295/186917664-1d1e82f7-a5cc-45f1-8f2f-75e3aab0ca25.png">
+
+> Note: In case you want to retry the authentication: Navigate in your browser to the base URL of Amazon Cognito & clear all site data in the browser developer tools. Do the same for your API Gateway website. Now you can restart the test with a clean state.
 
 
 ## Security
