@@ -5,6 +5,8 @@
     "api-gw-http-only-cookie-auth": "bin/api-gw-http-only-cookie-auth.js"
   },
   "scripts": {
+    "predeploy": "npm i && cd ./src/oAuth2Authorizer && npm i && cd ../oAuth2Callback && npm i",
+    "deploy": "cdk bootstrap && cdk deploy"
   },
   "dependencies": {
     "@aws-cdk/aws-apigatewayv2-alpha": "^2.38.1-alpha.0",
