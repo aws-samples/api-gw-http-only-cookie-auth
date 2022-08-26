@@ -29,6 +29,13 @@ $ npm run deploy
 
 ...Wait until the script finishes & all resources are deployed...
 
+You should get the relevant URL's from the output. Note down those URL's. The output looks something like this:
+```
+Outputs:
+ApiGwHttpOnlyCookieAuthStack.AppURL = https://1234567890.execute-api.eu-central-1.amazonaws.com
+ApiGwHttpOnlyCookieAuthStack.SigninURL = https://http-only-cookie-1234567890-abcd-efgh-ijkl-1234567890.auth.eu-central-1.amazoncognito.com/login?client_id=1234567890&response_type=code&redirect_uri=https://1234567890.execute-api.eu-central-1.amazonaws.com/oauth2/callback
+```
+
 Create test user:
 1. Navigate to the [Amazon Cognito](https://console.aws.amazon.com/cognito/home) console and choose **HttpOnlyCookie**.
 1. Under **Users** choose **Create user**.
@@ -45,13 +52,10 @@ Create test user:
 That's it 🎉
 
 Now that you have all components in place, you can test your OAuth2 Flow:
-1.	Navigate to the [Amazon Cognito console](https://console.aws.amazon.com/apigateway) and choose **HttpOnlyCookie**.
-2.	Under the navigation tabs choose **App integration**.
-3.	Under **App client list** choose **HttpOnlyCookieUserPoolMyAppClient**.
-4.	Choose **View Hosted UI**.
-5.	In the newly opened browser tab, open [your developer tools](https://balsamiq.com/support/faqs/browserconsole/), so you can inspect the network requests.
-6.	Login with your Email & password
-7.	Now you’ll see your `Hello from Lambda` message.
+1. Paste in your `SigninURL` which you've noted down above
+2.	In the newly opened browser tab, open [your developer tools](https://balsamiq.com/support/faqs/browserconsole/), so you can inspect the network requests.
+3.	Login with your Email & password
+4.	Now you’ll see your `Hello from Lambda` message.
 
 How do you know that the cookie was accurately set?
 Check your browser network tab in the browser developer settings. You’ll see the `/oauth2/callback` request which looks like this:
@@ -61,11 +65,13 @@ Check your browser network tab in the browser developer settings. You’ll see t
 As you can see the response headers include a `Set-Cookie` header as you specified in your Lambda function. This ensures that your OAuth2 access token is set as a HttpOnly cookie in the browser & access is prohibited from any client-side code.
 
 Also, you can inspect the cookie in the browser cookie storage:
+
 <img width="600" alt="Cookie storage" src="https://user-images.githubusercontent.com/7549295/186917664-1d1e82f7-a5cc-45f1-8f2f-75e3aab0ca25.png">
 
 > Note: In case you want to retry the authentication: Navigate in your browser to the base URL of Amazon Cognito & clear all site data in the browser developer tools. Do the same for your API Gateway website. Now you can restart the test with a clean state.
 
 When inspecting the HTTP request your browser makes in the developer tools you can see why authentication works. The HttpOnly cookie is automatically attached to every request:
+
 <img width="600" alt="Browser requests include HttpOnly cookies" src="https://user-images.githubusercontent.com/7549295/186919707-8f49a8b9-6bf6-4702-8698-c4170c69cdec.png">
 
 To verify that your authorizer Lambda function works correctly you need to paste the same `Invoke URL` in an incognito window. Incognito windows do not share the cookie store with your browser session. That’s why you see a `{"message":"Forbidden"}` error message with HTTP response code `403 – Forbidden`.
