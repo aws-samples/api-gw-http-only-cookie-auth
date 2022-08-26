@@ -67,6 +67,7 @@ exports.handler = async () => {
     body: JSON.stringify("Hello from Lambda!"),
   }; 
 };`),
+      reservedConcurrentExecutions: 1,
     });
 
     /**
@@ -83,6 +84,7 @@ exports.handler = async () => {
         CLIENT_ID: userPoolClient.userPoolClientId,
         REDIRECT_URI: callbackUrl,
       },
+      reservedConcurrentExecutions: 1,
     });
 
     /**
@@ -98,6 +100,7 @@ exports.handler = async () => {
         USER_POOL_ID: userPool.userPoolId,
         CLIENT_ID: userPoolClient.userPoolClientId,
       },
+      reservedConcurrentExecutions: 1,
     });
 
     /**
