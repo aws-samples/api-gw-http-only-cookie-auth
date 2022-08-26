@@ -83,7 +83,7 @@ export class ApiGwHttpOnlyCookieAuthStack extends cdk.Stack {
       runtime: Runtime.NODEJS_16_X,
       architecture: Architecture.ARM_64,
       handler: "index.handler",
-      code: Code.fromAsset(path.join(__dirname, "./src/oAuth2Callback")),
+      code: Code.fromAsset(path.join(__dirname, "../src/oAuth2Callback")),
       environment: {
         TOKEN_ENDPOINT: `${domain.baseUrl()}/oauth2/token`,
         CLIENT_ID: userPoolClient.userPoolClientId,
@@ -99,7 +99,7 @@ export class ApiGwHttpOnlyCookieAuthStack extends cdk.Stack {
       runtime: Runtime.NODEJS_16_X,
       architecture: Architecture.ARM_64,
       handler: "index.handler",
-      code: Code.fromAsset(path.join(__dirname, "./src/oAuth2Authorizer")),
+      code: Code.fromAsset(path.join(__dirname, "../src/oAuth2Authorizer")),
       environment: {
         USER_POOL_ID: userPool.userPoolId,
         CLIENT_ID: userPoolClient.userPoolClientId,
