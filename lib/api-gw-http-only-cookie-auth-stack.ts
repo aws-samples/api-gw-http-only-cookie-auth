@@ -61,7 +61,7 @@ export class ApiGwHttpOnlyCookieAuthStack extends Stack {
       runtime: Runtime.NODEJS_16_X,
       architecture: Architecture.ARM_64,
       code: new InlineCode(`
-exports.handler = () => {
+exports.handler = async () => {
   return {
     statusCode: 200,
     body: JSON.stringify("Hello from Lambda!"),
