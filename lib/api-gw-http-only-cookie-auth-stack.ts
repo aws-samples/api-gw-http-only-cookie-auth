@@ -15,7 +15,7 @@ export class ApiGwHttpOnlyCookieAuthStack extends Stack {
     /**
      * API Gateway
      */
-    const httpApi = new HttpApi(this, id);
+    const httpApi = new HttpApi(this, "HttpOnlyCookieHttpApi");
 
     const httpApiDomainName = `https://${httpApi.apiId}.execute-api.${Stack.of(this).region}.amazonaws.com`;
 
@@ -27,8 +27,8 @@ export class ApiGwHttpOnlyCookieAuthStack extends Stack {
     /**
      * Cognito
      */
-    const userPool = new UserPool(this, id, {
-      userPoolName: id,
+    const userPool = new UserPool(this, "HttpOnlyCookieUserPool", {
+      userPoolName: "HttpOnlyCookie",
       removalPolicy: RemovalPolicy.DESTROY,
     });
 
@@ -39,14 +39,13 @@ export class ApiGwHttpOnlyCookieAuthStack extends Stack {
       },
     });
 
-    const domain = userPool.addDomain(id + "-Domain", {
+    const domain = userPool.addDomain("UserPoolDomain", {
       cognitoDomain: {
-        domainPrefix: id.toLowerCase() + "-" + randomUUID(),
+        domainPrefix: "http-only-cookie" + "-" + randomUUID(),
       },
     });
     const signInUrl = domain.signInUrl(userPoolClient, {
       redirectUri: callbackUrl, // must be a URL configured under 'callbackUrls' with the client
-      // signInPath: "/oauth2/authorize", TODO: Check
     });
     new CfnOutput(this, "Sign-in URL", {
       value: signInUrl,
@@ -107,9 +106,10 @@ exports.handler = () => {
     httpApi.addRoutes({
       path: "/",
       methods: [HttpMethod.GET],
-      integration: new HttpLambdaIntegration("getProtectedResourceFunction", getProtectedResourceFunction),
-      authorizer: new HttpLambdaAuthorizer("oAuth2AuthorizerFunction", oAuth2AuthorizerFunction, {
+      integration: new HttpLambdaIntegration("getProtectedResource", getProtectedResourceFunction),
+      authorizer: new HttpLambdaAuthorizer("oAuth2Authorizer", oAuth2AuthorizerFunction, {
         responseTypes: [HttpLambdaResponseType.SIMPLE],
+        identitySource: [],
         resultsCacheTtl: Duration.seconds(0),
       }),
     });
