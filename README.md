@@ -27,7 +27,7 @@ Run the deployment script and follow the on-screen quesetions:
 $ npm run deploy
 ```
 
-...Wait until the script finishes & all resources are deployed...
+_...Wait until the script finishes & all resources are deployed..._
 
 You should get the relevant URL's from the output. Note down those URL's. The output looks something like this:
 ```
@@ -51,10 +51,12 @@ Create test user:
 
 That's it 🎉
 
+## Testing
+
 Now that you have all components in place, you can test your OAuth2 Flow:
-1. Paste in your `SigninURL` which you've noted down above
+1. Paste in your `SigninURL` (from above) in a browser.
 2.	In the newly opened browser tab, open [your developer tools](https://balsamiq.com/support/faqs/browserconsole/), so you can inspect the network requests.
-3.	Login with your Email & password
+3.	Login with your Email & password.
 4.	Now you’ll see your `Hello from Lambda` message.
 
 How do you know that the cookie was accurately set?
@@ -74,7 +76,7 @@ When inspecting the HTTP request your browser makes in the developer tools you c
 
 <img width="600" alt="Browser requests include HttpOnly cookies" src="https://user-images.githubusercontent.com/7549295/186919707-8f49a8b9-6bf6-4702-8698-c4170c69cdec.png">
 
-To verify that your authorizer Lambda function works correctly you need to paste the same `Invoke URL` in an incognito window. Incognito windows do not share the cookie store with your browser session. That’s why you see a `{"message":"Forbidden"}` error message with HTTP response code `403 – Forbidden`.
+To verify that your authorizer Lambda function works correctly you need to paste the `AppURL` (from above) in an incognito window. Incognito windows do not share the cookie store with your browser session. That’s why you see a `{"message":"Forbidden"}` error message with HTTP response code `403 – Forbidden`.
 
 You did it 🎉
 
