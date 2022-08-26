@@ -5,7 +5,7 @@ This repository contains accompanying source code for the AWS Blog post, [How to
 ## Pre-requisites
 
 - You should have level 200-300 know-how on the [OAuth2 protocol](https://oauth.net/2/).
-- You should have the [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html) installed & setup.
+- You should have the [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html) installed & [configured](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html).
 - Download & install [NodeJS](https://nodejs.org/en/download/)
 
 ## Deployment
