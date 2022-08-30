@@ -64,7 +64,7 @@ Check your browser network tab in the browser developer settings. You’ll see t
 
 <img width="600" alt="Callback network request" src="https://user-images.githubusercontent.com/7549295/186917482-dd368520-17be-4ca7-afc3-84626b60e15b.png">
 
-As you can see the response headers include a `Set-Cookie` header as you specified in your Lambda function. This ensures that your OAuth2 access token is set as a HttpOnly cookie in the browser & access is prohibited from any client-side code.
+As you can see the response headers include a `Set-Cookie` header as is specified in the `oAuth2Callback` Lambda function. This ensures that your OAuth2 access token is set as a HttpOnly cookie in the browser & access is prohibited from any client-side code.
 
 Also, you can inspect the cookie in the browser cookie storage:
 
@@ -76,7 +76,7 @@ When inspecting the HTTP request your browser makes in the developer tools you c
 
 <img width="600" alt="Browser requests include HttpOnly cookies" src="https://user-images.githubusercontent.com/7549295/186919707-8f49a8b9-6bf6-4702-8698-c4170c69cdec.png">
 
-To verify that your authorizer Lambda function works correctly you need to paste the `AppURL` (from above) in an incognito window. Incognito windows do not share the cookie store with your browser session. That’s why you see a `{"message":"Forbidden"}` error message with HTTP response code `403 – Forbidden`.
+To verify that the `oAuth2Authorizer` Lambda function works correctly you need to paste the `AppURL` (from above) in an incognito window. Incognito windows do not share the cookie store with your browser session. That’s why you see a `{"message":"Forbidden"}` error message with HTTP response code `403 – Forbidden`.
 
 You did it 🎉
 
