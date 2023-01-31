@@ -1,6 +1,6 @@
 # How to implement HttpOnly cookie authentication in Amazon API Gateway
 
-This repository contains accompanying source code for the AWS Blog post, [How to implement HttpOnly cookie authentication in Amazon API Gateway](https://aws.amazon.com/). Read the blog for more information on architecture & concept. This repository only contains automated tools to easily deploy the solution.
+This repository contains accompanying source code for the AWS Blog post, [How to implement HttpOnly cookie authentication in Amazon API Gateway](https://aws.amazon.com/blogs/security/reduce-risk-by-implementing-httponly-cookie-authentication-in-amazon-api-gateway/). Read the blog for more information on architecture & concept. This repository only contains automated tools to easily deploy the solution.
 
 ## Pre-requisites
 
