@@ -1,6 +1,6 @@
-import { HttpApi, HttpMethod } from "@aws-cdk/aws-apigatewayv2-alpha";
-import { HttpLambdaAuthorizer, HttpLambdaResponseType } from "@aws-cdk/aws-apigatewayv2-authorizers-alpha";
-import { HttpLambdaIntegration } from "@aws-cdk/aws-apigatewayv2-integrations-alpha";
+import { HttpApi, HttpMethod } from "aws-cdk-lib/aws-apigatewayv2";
+import { HttpLambdaAuthorizer, HttpLambdaResponseType } from "aws-cdk-lib/aws-apigatewayv2-authorizers";
+import { HttpLambdaIntegration } from "aws-cdk-lib/aws-apigatewayv2-integrations";
 import { CfnOutput, Duration, RemovalPolicy, Stack, StackProps } from "aws-cdk-lib";
 import { UserPool } from "aws-cdk-lib/aws-cognito";
 import { Architecture, Code, Function, InlineCode, Runtime } from "aws-cdk-lib/aws-lambda";
@@ -58,7 +58,7 @@ export class ApiGwHttpOnlyCookieAuthStack extends Stack {
     const getProtectedResourceFunction = new Function(this, "getProtectedResource", {
       functionName: "getProtectedResource",
       handler: "index.handler",
-      runtime: Runtime.NODEJS_16_X,
+      runtime: Runtime.NODEJS_20_X,
       architecture: Architecture.ARM_64,
       code: new InlineCode(`
 exports.handler = async () => {
@@ -75,7 +75,7 @@ exports.handler = async () => {
      */
     const oAuth2CallbackFunction = new Function(this, "oAuth2Callback", {
       functionName: "oAuth2Callback",
-      runtime: Runtime.NODEJS_16_X,
+      runtime: Runtime.NODEJS_20_X,
       architecture: Architecture.ARM_64,
       handler: "index.handler",
       code: Code.fromAsset(path.join(__dirname, "../src/oAuth2Callback")),
@@ -92,7 +92,7 @@ exports.handler = async () => {
      */
     const oAuth2AuthorizerFunction = new Function(this, "oAuth2Authorizer", {
       functionName: "oAuth2Authorizer",
-      runtime: Runtime.NODEJS_16_X,
+      runtime: Runtime.NODEJS_20_X,
       architecture: Architecture.ARM_64,
       handler: "index.handler",
       code: Code.fromAsset(path.join(__dirname, "../src/oAuth2Authorizer")),
