@@ -58,7 +58,7 @@ export class ApiGwHttpOnlyCookieAuthStack extends Stack {
     const getProtectedResourceFunction = new Function(this, "getProtectedResource", {
       functionName: "getProtectedResource",
       handler: "index.handler",
-      runtime: Runtime.NODEJS_20_X,
+      runtime: Runtime.NODEJS_24_X,
       architecture: Architecture.ARM_64,
       code: new InlineCode(`
 exports.handler = async () => {
@@ -75,7 +75,7 @@ exports.handler = async () => {
      */
     const oAuth2CallbackFunction = new Function(this, "oAuth2Callback", {
       functionName: "oAuth2Callback",
-      runtime: Runtime.NODEJS_20_X,
+      runtime: Runtime.NODEJS_24_X,
       architecture: Architecture.ARM_64,
       handler: "index.handler",
       code: Code.fromAsset(path.join(__dirname, "../src/oAuth2Callback")),
@@ -92,7 +92,7 @@ exports.handler = async () => {
      */
     const oAuth2AuthorizerFunction = new Function(this, "oAuth2Authorizer", {
       functionName: "oAuth2Authorizer",
-      runtime: Runtime.NODEJS_20_X,
+      runtime: Runtime.NODEJS_24_X,
       architecture: Architecture.ARM_64,
       handler: "index.handler",
       code: Code.fromAsset(path.join(__dirname, "../src/oAuth2Authorizer")),
