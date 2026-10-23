@@ -1,0 +1,17 @@
+#!/bin/sh
+# Runs the unit test suite before every commit. Skip once with: git commit --no-verify
+set -e
+
+repo_root="$(git rev-parse --show-toplevel)"
+cd "$repo_root"
+
+# The Lambda tests load each function's own dependencies
+for dir in src/oAuth2Authorizer src/oAuth2Callback; do
+  if [ ! -d "$dir/node_modules" ]; then
+    echo "pre-commit: missing $dir/node_modules. Run 'npm run predeploy' to install Lambda dependencies." >&2
+    exit 1
+  fi
+done
+
+echo "pre-commit: running unit tests..."
+npm test --silent

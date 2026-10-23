@@ -35,6 +35,8 @@ export class ApiGwHttpOnlyCookieAuthStack extends Stack {
     const callbackUrl = httpApiDomainName + "/oauth2/callback";
     const userPoolClient = userPool.addClient("MyAppClient", {
       oAuth: {
+        // Only the authorization code grant: the implicit grant would expose tokens in the redirect URL
+        flows: { authorizationCodeGrant: true },
         callbackUrls: [callbackUrl],
       },
     });

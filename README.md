@@ -80,6 +80,17 @@ To verify that the `oAuth2Authorizer` Lambda function works correctly you need t
 
 You did it 🎉
 
+### Unit tests
+
+Unit tests cover the CDK stack and both Lambda functions. They run offline and need no AWS credentials:
+
+```bash
+npm run predeploy   # installs root and Lambda dependencies
+npm test
+```
+
+`npm install` also installs a Git pre-commit hook (from `.githooks/`) that runs the tests before every commit. It is linked into `.git/hooks/` and does not change `core.hooksPath`. To skip it once, use `git commit --no-verify`.
+
 ## Tear down
 
 Don’t forget to delete all unwanted resources to avoid costs. Simply run at the root of your project:
